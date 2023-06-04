@@ -1,24 +1,22 @@
-var wordList = ["Molino de viento", "Imprenta", "Pólvora", "Brújula", "Reloj mecánico", "Astrolabio", "Arado"];
+var wordList = ["Molino de viento", "Imprenta", "Pólvora", "Brújula", "Reloj mecánico", "Arado"];
 var usedWords = []; // Palabras utilizadas
-var selectedWord = getRandomWord(); // Palabra seleccionada
+var selectedWord = ""; // Palabra seleccionada
 var lives = 6; // Vidas restantes
 var guessedLetters = []; // Letras adivinadas
 
-// Función para obtener una palabra aleatoria de la lista sin repetir
-function getRandomWord() {
+// Función para obtener una palabra no utilizada de la lista
+function getNextWord() {
     if (wordList.length === 0) {
         wordList = usedWords; // Si se han utilizado todas las palabras, reinicia la lista con las palabras utilizadas
         usedWords = [];
     }
 
-    var randomIndex = Math.floor(Math.random() * wordList.length);
-    var randomWord = wordList[randomIndex];
+    var randomIndex = Math.floor(Math.random() * wordList.length); // Obtener un índice aleatorio
+    var nextWord = wordList[randomIndex]; // Obtener la palabra en el índice aleatorio
+    wordList.splice(randomIndex, 1); // Eliminar la palabra de la lista original
+    usedWords.push(nextWord); // Agregar la palabra a la lista de palabras utilizadas
 
-    // Remover la palabra seleccionada de la lista para evitar repeticiones
-    wordList.splice(randomIndex, 1);
-    usedWords.push(randomWord);
-
-    return randomWord;
+    return nextWord;
 }
 
 // Función para mostrar la palabra oculta
@@ -39,6 +37,7 @@ function displayWord() {
 
     wordContainer.textContent = displayedWord;
 }
+
 
 // Función para mostrar las letras adivinadas
 function displayGuesses() {
@@ -77,15 +76,17 @@ function processGuess(letter) {
         displayGuesses();
 
         if (checkWin()) {
-            window.location.href = "win.html";
+            window.location.href = "win.html"; // Redireccionar a la página "win.html"
+            return;
         }
     } else {
         lives--;
         displayLives();
-        displayHangman();
 
-        if (lives === 0) {
+        if (lives <= 0) {
+            // Redireccionar a la página "lose.html" y pasar el valor de la palabra como parámetro
             window.location.href = "lose.html?word=" + encodeURIComponent(selectedWord);
+            return;
         }
     }
 }
@@ -108,11 +109,17 @@ function checkWin() {
 
 // Reiniciar el juego
 function restartGame() {
+    if (wordList.length === 0) {
+        wordList = usedWords;
+        usedWords = [];
+    }
+    selectedWord = getRandomWord();
     window.location.href = "index.html";
 }
 
 // Iniciar el juego cuando se cargue la página
 window.onload = function () {
+    selectedWord = getNextWord(); // Obtener la siguiente palabra
     displayWord();
     displayGuesses();
     displayLives();

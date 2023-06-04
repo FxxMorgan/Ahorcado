@@ -30,20 +30,15 @@
         <p>Lo siento, has perdido todas tus vidas.</p>
         <button class="btn btn-primary btn-play-again" onclick="restartGame()">Jugar de nuevo</button>
         <p class="message">La palabra era: <span id="word"></span></p>
-    </div>
-
-    <script>
-        // Obtener el valor del parámetro "word" de la URL
-        var urlParams = new URLSearchParams(window.location.search);
-        var word = urlParams.get("word");
-
-        // Mostrar la palabra en el elemento con el id "word"
-        var wordElement = document.getElementById("word");
-        wordElement.textContent = word;
-
-        function restartGame() {
+        <script src="script.js"></script>
+        <script>
+            var urlParams = new URLSearchParams(window.location.search);
+            var word = urlParams.get("word");
+            document.getElementById("word").textContent = word;
+            function restartGame() {
             window.location.href = "index.html";
         }
-    </script>
+        </script>
+    </div>
 </body>
 </html>

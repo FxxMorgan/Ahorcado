@@ -20,5 +20,12 @@
         </div>
     </div>
     <script src="script.js"></script>
+    <script>
+        selectedWord = getNextWord();
+        displayWord();
+        displayGuesses();
+        displayLives();
+        document.addEventListener("keyup", handleKeyPress);
+    </script>
 </body>
 </html>
