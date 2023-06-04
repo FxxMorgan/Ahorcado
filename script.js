@@ -1,23 +1,31 @@
 var wordList = ["Molino de viento", "Imprenta", "Pólvora", "Brújula", "Reloj mecánico", "Arado"];
-var usedWords = []; // Palabras utilizadas
+var lastIndex = localStorage.getItem("lastIndex") || -1; // Índice de la última palabra utilizada
 var selectedWord = ""; // Palabra seleccionada
 var lives = 6; // Vidas restantes
 var guessedLetters = []; // Letras adivinadas
 
 // Función para obtener una palabra no utilizada de la lista
 function getNextWord() {
-    if (wordList.length === 0) {
-        wordList = usedWords; // Si se han utilizado todas las palabras, reinicia la lista con las palabras utilizadas
-        usedWords = [];
+    var availableWords = wordList.filter(function(_, index) {
+        return index > lastIndex;
+    });
+
+    if (availableWords.length === 0) {
+        // Si se han utilizado todas las palabras, reinicia el juego
+        lastIndex = -1;
+        localStorage.removeItem("lastIndex");
+        availableWords = wordList;
     }
 
-    var randomIndex = Math.floor(Math.random() * wordList.length); // Obtener un índice aleatorio
-    var nextWord = wordList[randomIndex]; // Obtener la palabra en el índice aleatorio
-    wordList.splice(randomIndex, 1); // Eliminar la palabra de la lista original
-    usedWords.push(nextWord); // Agregar la palabra a la lista de palabras utilizadas
+    var randomIndex = Math.floor(Math.random() * availableWords.length); // Obtener un índice aleatorio
+    selectedWord = availableWords[randomIndex]; // Obtener la palabra en el índice aleatorio
+    lastIndex = wordList.indexOf(selectedWord); // Actualizar el índice de la última palabra utilizada
+    localStorage.setItem("lastIndex", lastIndex); // Guardar el índice en el localStorage
 
-    return nextWord;
+    return selectedWord;
 }
+
+
 
 // Función para mostrar la palabra oculta
 function displayWord() {
@@ -33,6 +41,12 @@ function displayWord() {
         } else {
             displayedWord += "_ ";
         }
+    }
+
+    displayedWord = displayedWord.trim(); // Eliminar espacios en blanco al final
+    
+    if (wordList.length === 0 && displayedWord.indexOf("_") === -1) {
+        displayedWord = displayedWord.replace(/_/g, "fin"); // Reemplazar guiones bajos con "fin" si no quedan palabras disponibles y no hay guiones bajos en la palabra
     }
 
     wordContainer.textContent = displayedWord;
