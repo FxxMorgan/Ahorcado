@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>¡Perdiste!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        h1 {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+        .btn-play-again {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        .message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Perdiste!</h1>
+        <p>Lo siento, has perdido todas tus vidas.</p>
+        <button class="btn btn-primary btn-play-again" onclick="restartGame()">Jugar de nuevo</button>
+        <p class="message">La palabra era: <span id="word"></span></p>
+    </div>
+
+    <script>
+        // Obtener el valor del parámetro "word" de la URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var word = urlParams.get("word");
+
+        // Mostrar la palabra en el elemento con el id "word"
+        var wordElement = document.getElementById("word");
+        wordElement.textContent = word;
+
+        function restartGame() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
